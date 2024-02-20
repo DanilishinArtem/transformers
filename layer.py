@@ -27,10 +27,3 @@ model = GPTLMHeadModel(config)
 # Getting layer of self flash attention
 model.transformer.layers[0].mixer.inner_attn
 model.transformer.layers[0].mixer.inner_cross_attn
-
-
-
-
-
-
-out = 1
