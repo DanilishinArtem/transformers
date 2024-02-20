@@ -1,3 +1,4 @@
+# Example of transformer -------------------->
 from transformers.models.gpt2.configuration_gpt2 import GPT2Config
 from flash_attn.models.gpt import GPTLMHeadModel
 
@@ -27,3 +28,24 @@ model = GPTLMHeadModel(config)
 # Getting layer of self flash attention
 model.transformer.layers[0].mixer.inner_attn
 model.transformer.layers[0].mixer.inner_cross_attn
+
+
+
+# Example of flash attention -------------------->
+from flash_attn import flash_attn_func
+import torch
+# Создаем тензоры q, k, v с более высокими размерностями
+batch_size = 2
+seqlen_q = 4
+num_heads = 3
+head_size_og = 5
+
+# Создаем тензор для запросов с правильной формой
+q = torch.ones((batch_size, seqlen_q, num_heads, head_size_og), dtype=torch.bfloat16, device='cuda')
+
+# Создаем тензоры для ключей и значений с аналогичной формой
+k = torch.ones((batch_size, seqlen_q, num_heads, head_size_og), dtype=torch.bfloat16, device='cuda')
+v = torch.ones((batch_size, seqlen_q, num_heads, head_size_og), dtype=torch.bfloat16, device='cuda')
+
+# Вызываем функцию flash_attn_func с этими тензорами
+output = flash_attn_func(q, k, v, 0.5, softmax_scale=1, causal=True)
