@@ -41,11 +41,21 @@ num_heads = 3
 head_size_og = 5
 
 # Создаем тензор для запросов с правильной формой
-q = torch.ones((batch_size, seqlen_q, num_heads, head_size_og), dtype=torch.bfloat16, device='cuda')
-
+q = torch.ones((batch_size, seqlen_q, num_heads, head_size_og), dtype=torch.bfloat16, device='cuda:0')
 # Создаем тензоры для ключей и значений с аналогичной формой
-k = torch.ones((batch_size, seqlen_q, num_heads, head_size_og), dtype=torch.bfloat16, device='cuda')
-v = torch.ones((batch_size, seqlen_q, num_heads, head_size_og), dtype=torch.bfloat16, device='cuda')
+k = torch.ones((batch_size, seqlen_q, num_heads, head_size_og), dtype=torch.bfloat16, device='cuda:0')
+v = torch.ones((batch_size, seqlen_q, num_heads, head_size_og), dtype=torch.bfloat16, device='cuda:0')
+
+
+
+# Создаем тензор для запросов с правильной формой
+q = torch.ones((1,1, 10), dtype=torch.bfloat16, device='cuda:0')
+# Создаем тензоры для ключей и значений с аналогичной формой
+k = torch.ones((1, 1, 10), dtype=torch.bfloat16, device='cuda:0')
+v = torch.ones((1, 1, 10), dtype=torch.bfloat16, device='cuda:0')
 
 # Вызываем функцию flash_attn_func с этими тензорами
 output = flash_attn_func(q, k, v, 0.5, softmax_scale=1, causal=True)
+
+
+import transformers
